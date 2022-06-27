@@ -1,5 +1,6 @@
 use std::collections::{BTreeMap, HashMap};
 
+use ::value::Value;
 use vrl::prelude::*;
 
 fn tally(value: Value) -> Resolved {
@@ -53,11 +54,6 @@ impl Function for Tally {
             kind: kind::ARRAY,
             required: true,
         }]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        tally(value)
     }
 }
 

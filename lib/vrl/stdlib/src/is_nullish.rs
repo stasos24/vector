@@ -1,3 +1,4 @@
+use ::value::Value;
 use vrl::prelude::*;
 
 use crate::util;
@@ -38,11 +39,6 @@ impl Function for IsNullish {
     ) -> Compiled {
         let value = arguments.required("value");
         Ok(Box::new(IsNullishFn { value }))
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        is_nullish(value)
     }
 }
 

@@ -1,3 +1,4 @@
+use ::value::Value;
 use vrl::prelude::*;
 
 use crate::util::round_to_precision;
@@ -72,13 +73,6 @@ impl Function for Round {
         let precision = arguments.optional("precision").unwrap_or(expr!(0));
 
         Ok(Box::new(RoundFn { value, precision }))
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let precision = args.optional("precision").unwrap_or_else(|| value!(0));
-
-        round(precision, value)
     }
 }
 

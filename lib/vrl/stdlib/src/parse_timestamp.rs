@@ -1,3 +1,4 @@
+use ::value::Value;
 use vector_common::conversion::Conversion;
 use vrl::prelude::*;
 
@@ -56,12 +57,6 @@ impl Function for ParseTimestamp {
                 required: true,
             },
         ]
-    }
-
-    fn call_by_vm(&self, ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let format = args.required("format");
-        parse_timestamp(value, format, ctx)
     }
 }
 

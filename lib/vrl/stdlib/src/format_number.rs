@@ -1,3 +1,4 @@
+use ::value::Value;
 use rust_decimal::{prelude::FromPrimitive, Decimal};
 use vrl::prelude::*;
 
@@ -138,15 +139,6 @@ impl Function for FormatNumber {
             source: r#"format_number(4672.4, decimal_separator: ",", grouping_separator: "_")"#,
             result: Ok("4_672,4"),
         }]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let scale = args.optional("scale");
-        let decimal_separator = args.optional("decimal_separator");
-        let grouping_separator = args.optional("grouping_separator");
-
-        format_number(value, scale, grouping_separator, decimal_separator)
     }
 }
 

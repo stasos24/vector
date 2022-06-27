@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 
+use ::value::Value;
 use vrl::prelude::*;
 
 fn join(array: Value, separator: Option<Value>) -> Resolved {
@@ -59,13 +60,6 @@ impl Function for Join {
             source: r#"join!(["a","b","c"], ",")"#,
             result: Ok(r#"a,b,c"#),
         }]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let separator = args.optional("separator");
-
-        join(value, separator)
     }
 }
 

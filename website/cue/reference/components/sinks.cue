@@ -167,7 +167,11 @@ components: sinks: [Name=string]: {
 		if features.send != _|_ {
 			if features.send.encoding.enabled {
 				encoding: {
-					description: "Configures the encoding specific sink behavior."
+					description: """
+						Configures the encoding specific sink behavior.
+
+						Note: When data in `encoding` is malformed, currently only a very generic error "data did not match any variant of untagged enum EncodingConfig" is reported. Follow this [issue](\(urls.vector_encoding_config_improve_error_message)) to track progress on improving these error messages.
+						"""
 					required:    features.send.encoding.codec.enabled
 					if !features.send.encoding.codec.enabled {common: true}
 					type: object: {
@@ -207,6 +211,9 @@ components: sinks: [Name=string]: {
 											}
 											if codec == "ndjson" {
 												ndjson: "Newline delimited list of JSON encoded events."
+											}
+											if codec == "avro" {
+												avro: "Avro encoded event with a given schema."
 											}
 										}
 									}
@@ -573,7 +580,7 @@ components: sinks: [Name=string]: {
 		if features.send != _|_ {
 			if features.send.request.enabled {
 				rate_limits: {
-					title: "Rate limits & adapative concurrency"
+					title: "Rate limits & adaptive concurrency"
 					body:  null
 					sub_sections: [
 						{
@@ -648,6 +655,7 @@ components: sinks: [Name=string]: {
 	}
 
 	telemetry: metrics: {
+		component_received_events_count:      components.sources.internal_metrics.output.metrics.component_received_events_count
 		component_received_events_total:      components.sources.internal_metrics.output.metrics.component_received_events_total
 		component_received_event_bytes_total: components.sources.internal_metrics.output.metrics.component_received_event_bytes_total
 		events_in_total:                      components.sources.internal_metrics.output.metrics.events_in_total

@@ -1,3 +1,4 @@
+use ::value::Value;
 use vrl::prelude::*;
 
 use crate::util::round_to_precision;
@@ -63,13 +64,6 @@ impl Function for Ceil {
             source: r#"ceil(5.2)"#,
             result: Ok("6.0"),
         }]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let precision = args.optional("precision");
-
-        ceil(value, precision)
     }
 }
 

@@ -1,3 +1,4 @@
+use ::value::Value;
 use vector_common::conversion::Conversion;
 use vrl::prelude::*;
 
@@ -111,12 +112,6 @@ impl Function for ToFloat {
         let value = arguments.required("value");
 
         Ok(Box::new(ToFloatFn { value }))
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-
-        to_float(value)
     }
 }
 

@@ -1,3 +1,4 @@
+use std::sync::Arc;
 use std::{
     collections::BTreeMap,
     fs::File,
@@ -7,13 +8,13 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 use snafu::{ResultExt, Snafu};
-use std::sync::Arc;
 use value::Kind;
 use vector_common::TimeZone;
+use vector_vrl_functions::set_semantic_meaning::MeaningList;
 use vrl::{
     diagnostic::{Formatter, Note},
     prelude::{DiagnosticMessage, ExpressionError},
-    Program, Runtime, Terminate, Vm, VrlRuntime,
+    Program, Runtime, Terminate, VrlRuntime,
 };
 
 use crate::{
@@ -21,7 +22,7 @@ use crate::{
         log_schema, ComponentKey, DataType, Input, Output, TransformConfig, TransformContext,
         TransformDescription,
     },
-    event::{Event, VrlTarget},
+    event::{Event, TargetEvents, VrlTarget},
     internal_events::{RemapMappingAbort, RemapMappingError},
     schema,
     transforms::{SyncTransform, Transform, TransformOutputsBuf},
@@ -76,8 +77,11 @@ impl RemapConfig {
         functions.append(&mut enrichment::vrl_functions());
         functions.append(&mut vector_vrl_functions::vrl_functions());
 
-        let mut state = vrl::state::ExternalEnv::new_with_kind(merged_schema_definition.into());
+        let mut state = vrl::state::ExternalEnv::new_with_kind(
+            merged_schema_definition.collection().clone().into(),
+        );
         state.set_external_context(enrichment_tables);
+        state.set_external_context(MeaningList::default());
 
         vrl::compile_with_state(&source, &functions, &mut state)
             .map_err(|diagnostics| {
@@ -112,10 +116,6 @@ impl TransformConfig for RemapConfig {
                 let (remap, warnings) = Remap::new_ast(self.clone(), context)?;
                 (Transform::synchronous(remap), warnings)
             }
-            VrlRuntime::Vm => {
-                let (remap, warnings) = Remap::new_vm(self.clone(), context)?;
-                (Transform::synchronous(remap), warnings)
-            }
         };
 
         // TODO: We could improve on this by adding support for non-fatal error
@@ -137,22 +137,36 @@ impl TransformConfig for RemapConfig {
         // We need to compile the VRL program in order to know the schema definition output of this
         // transform. We ignore any compilation errors, as those are caught by the transform build
         // step.
-        //
-        // TODO: Keep track of semantic meaning for fields.
         let default_definition = self
             .compile_vrl_program(
                 enrichment::TableRegistry::default(),
                 merged_definition.clone(),
             )
             .ok()
-            .and_then(|(_, _, _, state)| state.target_kind().cloned())
-            .and_then(Kind::into_object)
-            .map(Into::into)
+            .and_then(|(_, _, _, state)| {
+                let meaning = state
+                    .get_external_context::<MeaningList>()
+                    .cloned()
+                    .expect("context exists")
+                    .0;
+
+                state
+                    .target_kind()
+                    .clone()
+                    .into_object()
+                    .map(schema::Definition::from)
+                    .map(|mut def| {
+                        for (id, path) in meaning {
+                            def = def.with_known_meaning(path, &id);
+                        }
+                        def
+                    })
+            })
             .unwrap_or_else(schema::Definition::empty);
 
         // When a message is dropped and re-routed, we keep the original event, but also annotate
         // it with additional metadata.
-        let dropped_definition = merged_definition.clone().required_field(
+        let dropped_definition = merged_definition.clone().with_field(
             log_schema().metadata_key(),
             Kind::object(BTreeMap::from([
                 ("reason".into(), Kind::bytes()),
@@ -170,7 +184,9 @@ impl TransformConfig for RemapConfig {
         if self.reroute_dropped {
             vec![
                 default_output,
-                Output::from((DROPPED, DataType::all())).with_schema_definition(dropped_definition),
+                Output::default(DataType::all())
+                    .with_schema_definition(dropped_definition)
+                    .with_port(DROPPED),
             ]
         } else {
             vec![default_output]
@@ -208,33 +224,7 @@ pub trait VrlRunner {
         target: &mut VrlTarget,
         program: &Program,
         timezone: &TimeZone,
-    ) -> std::result::Result<vrl::Value, Terminate>;
-}
-
-#[derive(Debug)]
-pub struct VmRunner {
-    runtime: Runtime,
-    vm: Arc<Vm>,
-}
-
-impl Clone for VmRunner {
-    fn clone(&self) -> Self {
-        Self {
-            runtime: Runtime::default(),
-            vm: Arc::clone(&self.vm),
-        }
-    }
-}
-
-impl VrlRunner for VmRunner {
-    fn run(
-        &mut self,
-        target: &mut VrlTarget,
-        _: &Program,
-        timezone: &TimeZone,
-    ) -> std::result::Result<vrl::Value, Terminate> {
-        self.runtime.run_vm(&self.vm, target, timezone)
-    }
+    ) -> std::result::Result<value::Value, Terminate>;
 }
 
 #[derive(Debug)]
@@ -256,31 +246,10 @@ impl VrlRunner for AstRunner {
         target: &mut VrlTarget,
         program: &Program,
         timezone: &TimeZone,
-    ) -> std::result::Result<vrl::Value, Terminate> {
+    ) -> std::result::Result<value::Value, Terminate> {
         let result = self.runtime.resolve(target, program, timezone);
         self.runtime.clear();
         result
-    }
-}
-
-impl Remap<VmRunner> {
-    pub fn new_vm(
-        config: RemapConfig,
-        context: &TransformContext,
-    ) -> crate::Result<(Self, String)> {
-        let (program, warnings, functions, mut state) = config.compile_vrl_program(
-            context.enrichment_tables.clone(),
-            context.merged_schema_definition.clone(),
-        )?;
-
-        let runtime = Runtime::default();
-        let vm = runtime.compile(functions, &program, &mut state)?;
-        let runner = VmRunner {
-            runtime,
-            vm: Arc::new(vm),
-        };
-
-        Self::new(config, context, program, runner).map(|remap| (remap, warnings))
     }
 }
 
@@ -338,7 +307,7 @@ where
     }
 
     #[cfg(test)]
-    fn runner(&self) -> &Runner {
+    const fn runner(&self) -> &Runner {
         &self.runner
     }
 
@@ -391,7 +360,7 @@ where
         }
     }
 
-    fn run_vrl(&mut self, target: &mut VrlTarget) -> std::result::Result<vrl::Value, Terminate> {
+    fn run_vrl(&mut self, target: &mut VrlTarget) -> std::result::Result<value::Value, Terminate> {
         self.runner.run(target, &self.program, &self.timezone)
     }
 }
@@ -413,23 +382,27 @@ where
         // the event to the `dropped` output.
         let forward_on_error = !self.drop_on_error || self.reroute_dropped;
         let forward_on_abort = !self.drop_on_abort || self.reroute_dropped;
-        let original_event = if (self.program.can_fail() && forward_on_error)
-            || (self.program.can_abort() && forward_on_abort)
+        let original_event = if (self.program.info().fallible && forward_on_error)
+            || (self.program.info().abortable && forward_on_abort)
         {
             Some(event.clone())
         } else {
             None
         };
 
-        let mut target: VrlTarget = event.into();
+        let mut target = VrlTarget::new(event, self.program.info());
         let result = self.run_vrl(&mut target);
 
         match result {
-            Ok(_) => {
-                for event in target.into_events() {
-                    push_default(event, output, &self.default_schema_definition);
+            Ok(_) => match target.into_events() {
+                TargetEvents::One(event) => {
+                    push_default(event, output, &self.default_schema_definition)
                 }
-            }
+                TargetEvents::Logs(events) => events
+                    .for_each(|event| push_default(event, output, &self.default_schema_definition)),
+                TargetEvents::Traces(events) => events
+                    .for_each(|event| push_default(event, output, &self.default_schema_definition)),
+            },
             Err(reason) => {
                 let (reason, error, drop) = match reason {
                     Terminate::Abort(error) => {
@@ -522,7 +495,7 @@ mod tests {
     };
 
     fn test_default_schema_definition() -> schema::Definition {
-        schema::Definition::empty().required_field(
+        schema::Definition::empty().with_field(
             "a default field",
             Kind::integer().or_bytes(),
             Some("default"),
@@ -530,7 +503,7 @@ mod tests {
     }
 
     fn test_dropped_schema_definition() -> schema::Definition {
-        schema::Definition::empty().required_field(
+        schema::Definition::empty().with_field(
             "a dropped field",
             Kind::boolean().or_null(),
             Some("dropped"),
@@ -953,7 +926,7 @@ mod tests {
         let context = TransformContext {
             key: Some(ComponentKey::from("remapper")),
             schema_definitions,
-            merged_schema_definition: schema::Definition::empty().required_field(
+            merged_schema_definition: schema::Definition::empty().with_field(
                 "hello",
                 Kind::bytes(),
                 None,
@@ -1203,16 +1176,16 @@ mod tests {
         };
 
         let schema_definition = schema::Definition::empty()
-            .required_field("foo", Kind::bytes(), None)
-            .required_field(
+            .with_field("foo", Kind::bytes().or_null(), None)
+            .with_field(
                 "tags",
-                Kind::object(BTreeMap::from([("foo".into(), Kind::bytes())])),
+                Kind::object(BTreeMap::from([("foo".into(), Kind::bytes())])).or_null(),
                 None,
             );
 
         assert_eq!(
-            vec![Output::default(DataType::all()).with_schema_definition(schema_definition)],
             conf.outputs(&schema::Definition::empty()),
+            vec![Output::default(DataType::all()).with_schema_definition(schema_definition)]
         );
 
         let context = TransformContext {
@@ -1278,7 +1251,7 @@ mod tests {
         let mut outputs = TransformOutputsBuf::new_with_capacity(
             vec![
                 Output::default(DataType::all()),
-                Output::from((DROPPED, DataType::all())),
+                Output::default(DataType::all()).with_port(DROPPED),
             ],
             1,
         );
@@ -1305,7 +1278,7 @@ mod tests {
         let mut outputs = TransformOutputsBuf::new_with_capacity(
             vec![
                 Output::default(DataType::all()),
-                Output::from((DROPPED, DataType::all())),
+                Output::default(DataType::all()).with_port(DROPPED),
             ],
             1,
         );

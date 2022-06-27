@@ -1,5 +1,6 @@
 use std::str::FromStr;
 
+use ::value::Value;
 use vrl::prelude::*;
 
 use crate::util::Base64Charset;
@@ -72,14 +73,6 @@ impl Function for EncodeBase64 {
             source: r#"encode_base64("some string value", padding: false, charset: "url_safe")"#,
             result: Ok("c29tZSBzdHJpbmcgdmFsdWU"),
         }]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let padding = args.optional("padding");
-        let charset = args.optional("charset");
-
-        encode_base64(value, padding, charset)
     }
 }
 

@@ -1,5 +1,6 @@
 use std::net::Ipv4Addr;
 
+use ::value::Value;
 use vrl::prelude::*;
 
 fn ip_aton(value: Value) -> Resolved {
@@ -43,11 +44,6 @@ impl Function for IpAton {
         let value = arguments.required("value");
 
         Ok(Box::new(IpAtonFn { value }))
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        ip_aton(value)
     }
 }
 

@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use bytes::Bytes;
 use datadog_filter::{
     build_matcher,
@@ -7,7 +9,6 @@ use datadog_filter::{
 use datadog_search_syntax::parse;
 use datadog_search_syntax::{Comparison, ComparisonValue, Field};
 use serde::{Deserialize, Serialize};
-use std::borrow::Cow;
 use vector_core::event::{Event, LogEvent, Value};
 
 use crate::conditions::{Condition, ConditionConfig, ConditionDescription, Conditional};
@@ -31,8 +32,9 @@ pub struct DatadogSearchRunner {
 }
 
 impl Conditional for DatadogSearchRunner {
-    fn check(&self, e: &Event) -> bool {
-        self.matcher.run(e)
+    fn check(&self, e: Event) -> (bool, Event) {
+        let result = self.matcher.run(&e);
+        (result, e)
     }
 }
 
@@ -316,13 +318,13 @@ where
 
 #[cfg(test)]
 mod test {
-    use super::*;
-
-    use crate::log_event;
     use datadog_filter::{build_matcher, Filter, Resolver};
     use datadog_search_syntax::parse;
     use serde_json::json;
     use vector_core::event::Event;
+
+    use super::*;
+    use crate::log_event;
 
     /// Returns the following: Datadog Search Syntax source (to be parsed), an `Event` that
     /// should pass when matched against the compiled source, and an `Event` that should fail.
@@ -1064,14 +1066,14 @@ mod test {
                 .unwrap_or_else(|_| panic!("build failed: {}", source));
 
             assert!(
-                cond.check_with_context(&pass).is_ok(),
+                cond.check_with_context(pass.clone()).0.is_ok(),
                 "should pass: {}\nevent: {:?}",
                 source,
                 pass.as_log()
             );
 
             assert!(
-                cond.check_with_context(&fail).is_err(),
+                cond.check_with_context(fail.clone()).0.is_err(),
                 "should fail: {}\nevent: {:?}",
                 source,
                 fail.as_log()

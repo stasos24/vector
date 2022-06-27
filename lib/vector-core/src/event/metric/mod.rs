@@ -4,7 +4,6 @@ use std::{
     collections::{btree_map, BTreeMap},
     convert::AsRef,
     fmt::{self, Display, Formatter},
-    sync::Arc,
 };
 
 use chrono::{DateTime, Utc};
@@ -102,14 +101,14 @@ impl Metric {
 
     /// Consumes this metric, returning it with an updated set of event finalizers attached to `batch`.
     #[must_use]
-    pub fn with_batch_notifier(mut self, batch: &Arc<BatchNotifier>) -> Self {
+    pub fn with_batch_notifier(mut self, batch: &BatchNotifier) -> Self {
         self.metadata = self.metadata.with_batch_notifier(batch);
         self
     }
 
     /// Consumes this metric, returning it with an optionally updated set of event finalizers attached to `batch`.
     #[must_use]
-    pub fn with_batch_notifier_option(mut self, batch: &Option<Arc<BatchNotifier>>) -> Self {
+    pub fn with_batch_notifier_option(mut self, batch: &Option<BatchNotifier>) -> Self {
         self.metadata = self.metadata.with_batch_notifier_option(batch);
         self
     }
@@ -427,10 +426,10 @@ pub enum MetricKind {
 }
 
 #[cfg(feature = "vrl")]
-impl TryFrom<vrl_lib::Value> for MetricKind {
+impl TryFrom<::value::Value> for MetricKind {
     type Error = String;
 
-    fn try_from(value: vrl_lib::Value) -> Result<Self, Self::Error> {
+    fn try_from(value: ::value::Value) -> Result<Self, Self::Error> {
         let value = value.try_bytes().map_err(|e| e.to_string())?;
         match std::str::from_utf8(&value).map_err(|e| e.to_string())? {
             "incremental" => Ok(Self::Incremental),
@@ -444,7 +443,7 @@ impl TryFrom<vrl_lib::Value> for MetricKind {
 }
 
 #[cfg(feature = "vrl")]
-impl From<MetricKind> for vrl_lib::Value {
+impl From<MetricKind> for ::value::Value {
     fn from(kind: MetricKind) -> Self {
         match kind {
             MetricKind::Incremental => "incremental".into(),

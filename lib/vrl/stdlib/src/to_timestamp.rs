@@ -1,5 +1,6 @@
 use std::str::FromStr;
 
+use ::value::Value;
 use chrono::{TimeZone as _, Utc};
 use vector_common::{conversion::Conversion, TimeZone};
 use vrl::{function::Error, prelude::*};
@@ -223,16 +224,6 @@ impl Function for ToTimestamp {
             },
             _ => Ok(None),
         }
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let unit = args
-            .optional_any("unit")
-            .map(|unit| *unit.downcast_ref::<Unit>().unwrap())
-            .unwrap_or_default();
-
-        to_timestamp(value, unit)
     }
 }
 

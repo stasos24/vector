@@ -1,15 +1,15 @@
-use bitmask_enum::bitmask;
-use serde::{Deserialize, Serialize};
 use std::{fmt, num::NonZeroUsize};
 
+use bitmask_enum::bitmask;
+
 mod global_options;
-mod id;
 mod log_schema;
 pub mod proxy;
 
 pub use global_options::GlobalOptions;
-pub use id::ComponentKey;
 pub use log_schema::{init_log_schema, log_schema, LogSchema};
+pub use vector_common::config::ComponentKey;
+use vector_config::configurable_component;
 
 use crate::schema;
 
@@ -84,6 +84,13 @@ impl Input {
             log_schema_requirement: schema::Requirement::empty(),
         }
     }
+
+    /// Set the schema requirement for this output.
+    #[must_use]
+    pub fn with_schema_requirement(mut self, schema_requirement: schema::Requirement) -> Self {
+        self.log_schema_requirement = schema_requirement;
+        self
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -118,26 +125,26 @@ impl Output {
         }
     }
 
-    /// Set the schema definition for this output.
+    /// Set the schema definition for this `Output`.
     #[must_use]
     pub fn with_schema_definition(mut self, schema_definition: schema::Definition) -> Self {
         self.log_schema_definition = Some(schema_definition);
         self
     }
-}
 
-impl<T: Into<String>> From<(T, DataType)> for Output {
-    fn from((name, ty): (T, DataType)) -> Self {
-        Self {
-            port: Some(name.into()),
-            ty,
-            log_schema_definition: None,
-        }
+    /// Set the port name for this `Output`.
+    #[must_use]
+    pub fn with_port(mut self, name: impl Into<String>) -> Self {
+        self.port = Some(name.into());
+        self
     }
 }
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+/// Configuration of acknowledgement behavior.
+#[configurable_component]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct AcknowledgementsConfig {
+    /// Enables end-to-end acknowledgements.
     enabled: Option<bool>,
 }
 

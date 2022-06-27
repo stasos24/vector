@@ -1,3 +1,4 @@
+#![deny(warnings)]
 #![deny(clippy::all)]
 #![deny(unreachable_pub)]
 #![deny(unused_allocation)]
@@ -101,6 +102,8 @@ mod is_empty;
 mod is_float;
 #[cfg(feature = "is_integer")]
 mod is_integer;
+#[cfg(feature = "is_json")]
+mod is_json;
 #[cfg(feature = "is_null")]
 mod is_null;
 #[cfg(feature = "is_nullish")]
@@ -267,6 +270,8 @@ mod to_timestamp;
 mod to_unix_timestamp;
 #[cfg(feature = "truncate")]
 mod truncate;
+#[cfg(feature = "type_def")]
+mod type_def;
 #[cfg(feature = "unique")]
 mod unique;
 #[cfg(feature = "unnest")]
@@ -278,12 +283,6 @@ mod uuid_v4;
 
 // -----------------------------------------------------------------------------
 
-#[cfg(feature = "array")]
-pub use crate::array::Array;
-#[cfg(feature = "md5")]
-pub use crate::md5::Md5;
-#[cfg(feature = "sha1")]
-pub use crate::sha1::Sha1;
 #[cfg(feature = "append")]
 pub use append::Append;
 #[cfg(feature = "assert")]
@@ -376,6 +375,8 @@ pub use is_empty::IsEmpty;
 pub use is_float::IsFloat;
 #[cfg(feature = "is_integer")]
 pub use is_integer::IsInteger;
+#[cfg(feature = "is_json")]
+pub use is_json::IsJson;
 #[cfg(feature = "is_null")]
 pub use is_null::IsNull;
 #[cfg(feature = "is_nullish")]
@@ -532,6 +533,8 @@ pub use to_timestamp::ToTimestamp;
 pub use to_unix_timestamp::ToUnixTimestamp;
 #[cfg(feature = "truncate")]
 pub use truncate::Truncate;
+#[cfg(feature = "type_def")]
+pub use type_def::TypeDef;
 #[cfg(feature = "unique")]
 pub use unique::Unique;
 #[cfg(feature = "unnest")]
@@ -540,6 +543,13 @@ pub use unnest::Unnest;
 pub use upcase::Upcase;
 #[cfg(feature = "uuid_v4")]
 pub use uuid_v4::UuidV4;
+
+#[cfg(feature = "array")]
+pub use crate::array::Array;
+#[cfg(feature = "md5")]
+pub use crate::md5::Md5;
+#[cfg(feature = "sha1")]
+pub use crate::sha1::Sha1;
 
 pub fn all() -> Vec<Box<dyn vrl::Function>> {
     vec![
@@ -637,6 +647,8 @@ pub fn all() -> Vec<Box<dyn vrl::Function>> {
         Box::new(IsFloat),
         #[cfg(feature = "is_integer")]
         Box::new(IsInteger),
+        #[cfg(feature = "is_json")]
+        Box::new(IsJson),
         #[cfg(feature = "is_null")]
         Box::new(IsNull),
         #[cfg(feature = "is_nullish")]
@@ -799,6 +811,8 @@ pub fn all() -> Vec<Box<dyn vrl::Function>> {
         Box::new(ToUnixTimestamp),
         #[cfg(feature = "truncate")]
         Box::new(Truncate),
+        #[cfg(feature = "type_def")]
+        Box::new(TypeDef),
         #[cfg(feature = "unique")]
         Box::new(Unique),
         #[cfg(feature = "unnest")]

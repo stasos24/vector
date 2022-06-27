@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use ::value::Value;
 use chrono::{DateTime, Datelike, Utc};
 use syslog_loose::{IncompleteDate, Message, ProcId, Protocol};
 use vector_common::TimeZone;
@@ -61,11 +62,6 @@ impl Function for ParseSyslog {
         let value = arguments.required("value");
 
         Ok(Box::new(ParseSyslogFn { value }))
-    }
-
-    fn call_by_vm(&self, ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        parse_syslog(value, ctx)
     }
 }
 
@@ -253,6 +249,23 @@ mod tests {
                 "timestamp" => chrono::Utc.ymd(2019, 2, 13).and_hms_milli(19, 48, 34, 0),
                 "version" => 1,
                 "non_empty.x" => "1",
+            }),
+            tdef: TypeDef::object(inner_kind()).fallible(),
+        }
+
+        empty_sd_value {
+            args: func_args![value: r#"<13>1 2019-02-13T19:48:34+00:00 74794bfb6795 root 8449 - [non_empty x=""][empty] qwerty"#],
+            want: Ok(btreemap!{
+                "message" => "qwerty",
+                "appname" => "root",
+                "facility" => "user",
+                "hostname" => "74794bfb6795",
+                "message" => "qwerty",
+                "procid" => 8449,
+                "severity" => "notice",
+                "timestamp" => chrono::Utc.ymd(2019, 2, 13).and_hms_milli(19, 48, 34, 0),
+                "version" => 1,
+                "non_empty.x" => "",
             }),
             tdef: TypeDef::object(inner_kind()).fallible(),
         }

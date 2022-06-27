@@ -1,5 +1,6 @@
 use std::collections::VecDeque;
 
+use ::value::Value;
 use vrl::prelude::*;
 
 fn format_int(value: Value, base: Option<Value>) -> Resolved {
@@ -77,13 +78,6 @@ impl Function for FormatInt {
                 result: Ok("-2a"),
             },
         ]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let base = args.optional("base");
-
-        format_int(value, base)
     }
 }
 

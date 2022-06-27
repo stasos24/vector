@@ -41,8 +41,9 @@ impl SyncTransform for Route {
     ) {
         let mut check_failed: usize = 0;
         for (output_name, condition) in &self.conditions {
-            if condition.check(&event) {
-                output.push_named(output_name, event.clone());
+            let (result, event) = condition.check(event.clone());
+            if result {
+                output.push_named(output_name, event);
             } else {
                 check_failed += 1;
             }
@@ -113,9 +114,9 @@ impl TransformConfig for RouteConfig {
         let mut result: Vec<Output> = self
             .route
             .keys()
-            .map(|output_name| Output::from((output_name, DataType::all())))
+            .map(|output_name| Output::default(DataType::all()).with_port(output_name))
             .collect();
-        result.push(Output::from((UNMATCHED_ROUTE, DataType::all())));
+        result.push(Output::default(DataType::all()).with_port(UNMATCHED_ROUTE));
         result
     }
 
@@ -159,12 +160,11 @@ mod test {
     use indoc::indoc;
     use vector_core::transform::TransformOutputsBuf;
 
+    use super::*;
     use crate::{
         config::{build_unit_tests, ConfigBuilder},
         test_util::components::{init_test, COMPONENT_MULTIPLE_OUTPUTS_TESTS},
     };
-
-    use super::*;
 
     #[test]
     fn generate_config() {
@@ -243,7 +243,9 @@ mod test {
         let mut outputs = TransformOutputsBuf::new_with_capacity(
             output_names
                 .iter()
-                .map(|output_name| Output::from((output_name.to_owned(), DataType::all())))
+                .map(|output_name| {
+                    Output::default(DataType::all()).with_port(output_name.to_owned())
+                })
                 .collect(),
             1,
         );
@@ -282,7 +284,9 @@ mod test {
         let mut outputs = TransformOutputsBuf::new_with_capacity(
             output_names
                 .iter()
-                .map(|output_name| Output::from((output_name.to_owned(), DataType::all())))
+                .map(|output_name| {
+                    Output::default(DataType::all()).with_port(output_name.to_owned())
+                })
                 .collect(),
             1,
         );
@@ -320,7 +324,9 @@ mod test {
         let mut outputs = TransformOutputsBuf::new_with_capacity(
             output_names
                 .iter()
-                .map(|output_name| Output::from((output_name.to_owned(), DataType::all())))
+                .map(|output_name| {
+                    Output::default(DataType::all()).with_port(output_name.to_owned())
+                })
                 .collect(),
             1,
         );

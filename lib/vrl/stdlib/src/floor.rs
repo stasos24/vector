@@ -1,3 +1,4 @@
+use ::value::Value;
 use vrl::prelude::*;
 
 use crate::util::round_to_precision;
@@ -63,13 +64,6 @@ impl Function for Floor {
             source: r#"floor(9.8)"#,
             result: Ok("9.0"),
         }]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let precision = args.optional("precision");
-
-        floor(precision, value)
     }
 }
 

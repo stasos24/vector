@@ -1,3 +1,4 @@
+use core::TargetValueRef;
 use std::{
     collections::BTreeMap,
     fs::File,
@@ -6,13 +7,11 @@ use std::{
     path::PathBuf,
 };
 
+use ::value::Value;
 use clap::Parser;
+use value::Secrets;
 use vector_common::TimeZone;
-use vrl::{
-    diagnostic::Formatter,
-    state::{self, ExternalEnv},
-    Program, Runtime, Target, Value, VrlRuntime,
-};
+use vrl::{diagnostic::Formatter, state, Program, Runtime, Target, VrlRuntime};
 
 #[cfg(feature = "repl")]
 use super::repl;
@@ -132,17 +131,17 @@ fn run(opts: &Opts) -> Result<(), Error> {
         }
 
         for mut object in objects {
+            let mut metadata = Value::Object(BTreeMap::new());
+            let mut secrets = Secrets::new();
+            let mut target = TargetValueRef {
+                value: &mut object,
+                metadata: &mut metadata,
+                secrets: &mut secrets,
+            };
             let state = state::Runtime::default();
             let runtime = Runtime::new(state);
-            let result = execute(
-                &mut object,
-                &program,
-                &tz,
-                runtime,
-                stdlib::all(),
-                opts.runtime,
-            )
-            .map(|v| {
+
+            let result = execute(&mut target, &program, &tz, runtime, opts.runtime).map(|v| {
                 if opts.print_object {
                     object.to_string()
                 } else {
@@ -164,6 +163,17 @@ fn run(opts: &Opts) -> Result<(), Error> {
 
 #[cfg(feature = "repl")]
 fn repl(objects: Vec<Value>, timezone: &TimeZone, vrl_runtime: VrlRuntime) -> Result<(), Error> {
+    use core::TargetValue;
+
+    let objects = objects
+        .into_iter()
+        .map(|value| TargetValue {
+            value,
+            metadata: Value::Object(BTreeMap::new()),
+            secrets: Secrets::new(),
+        })
+        .collect();
+
     repl::run(objects, timezone, vrl_runtime);
     Ok(())
 }
@@ -178,18 +188,9 @@ fn execute(
     program: &Program,
     timezone: &TimeZone,
     mut runtime: Runtime,
-    functions: Vec<Box<dyn vrl::Function>>,
     vrl_runtime: VrlRuntime,
 ) -> Result<Value, Error> {
     match vrl_runtime {
-        VrlRuntime::Vm => {
-            let mut state = ExternalEnv::default();
-            let vm = runtime.compile(functions, program, &mut state).unwrap();
-
-            runtime
-                .run_vm(&vm, object, timezone)
-                .map_err(Error::Runtime)
-        }
         VrlRuntime::Ast => runtime
             .resolve(object, program, timezone)
             .map_err(Error::Runtime),
@@ -200,7 +201,7 @@ fn serde_to_vrl(value: serde_json::Value) -> Value {
     use serde_json::Value as JsonValue;
 
     match value {
-        JsonValue::Null => vrl::Value::Null,
+        JsonValue::Null => ::value::Value::Null,
         JsonValue::Object(v) => v
             .into_iter()
             .map(|(k, v)| (k, serde_to_vrl(v)))

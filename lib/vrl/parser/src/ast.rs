@@ -1,8 +1,3 @@
-#[cfg(feature = "fuzz")]
-use arbitrary::Arbitrary;
-use diagnostic::Span;
-use lookup::LookupBuf;
-use ordered_float::NotNan;
 use std::{
     collections::BTreeMap,
     fmt,
@@ -11,6 +6,12 @@ use std::{
     ops::Deref,
     str::FromStr,
 };
+
+#[cfg(feature = "fuzz")]
+use arbitrary::Arbitrary;
+use diagnostic::Span;
+use lookup::LookupBuf;
+use ordered_float::NotNan;
 
 use crate::{template_string::TemplateString, Error};
 
@@ -34,6 +35,14 @@ impl<T> Node<T> {
             span,
             node: f(node),
         }
+    }
+
+    pub fn map_option<R>(self, mut f: impl FnMut(T) -> Option<R>) -> Option<Node<R>> {
+        let Node { span, node } = self;
+
+        let node = f(node)?;
+
+        Some(Node { span, node })
     }
 
     pub fn new(span: Span, node: T) -> Self {
@@ -173,7 +182,7 @@ impl IntoIterator for Program {
 // root expression
 // -----------------------------------------------------------------------------
 
-#[allow(clippy::large_enum_variant)] // discovered during Rust upgrade to 1.57; just allowing for now since we did previously
+#[allow(clippy::large_enum_variant)]
 #[derive(PartialEq)]
 pub enum RootExpr {
     Expr(Node<Expr>),

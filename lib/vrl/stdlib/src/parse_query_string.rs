@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use ::value::Value;
 use url::form_urlencoded;
 use vrl::prelude::*;
 
@@ -67,11 +68,6 @@ impl Function for ParseQueryString {
             kind: kind::BYTES,
             required: true,
         }]
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        parse_query_string(value)
     }
 }
 

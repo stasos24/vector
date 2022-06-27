@@ -1,3 +1,4 @@
+use ::value::Value;
 use vrl::prelude::*;
 
 fn split(value: Value, limit: Value, pattern: Value) -> Resolved {
@@ -87,14 +88,6 @@ impl Function for Split {
             pattern,
             limit,
         }))
-    }
-
-    fn call_by_vm(&self, _ctx: &mut Context, args: &mut VmArgumentList) -> Resolved {
-        let value = args.required("value");
-        let pattern = args.required("pattern");
-        let limit = args.optional("limit").unwrap_or_else(|| value!(999999999));
-
-        split(value, limit, pattern)
     }
 }
 
