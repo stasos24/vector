@@ -1,0 +1,4 @@
+./target/x86_64-unknown-linux-gnu/debug/vector
+-n
+--config
+vector.toml

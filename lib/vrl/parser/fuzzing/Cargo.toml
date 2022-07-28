@@ -11,7 +11,8 @@ cargo-fuzz = true
 
 [dependencies]
 arbitrary = { version = "1", optional = true, features = ["derive"] }
-afl="*"
+afl = "*"
+panic-message= "*"
 
 [dependencies.vrl-parser]
 path = ".."

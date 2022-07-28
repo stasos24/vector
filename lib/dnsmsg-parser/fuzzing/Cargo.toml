@@ -1,0 +1,27 @@
+[package]
+name = "dnsparser"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+afl = "*"
+
+[dependencies.dnsmsg-parser]
+path = "../"
+
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "dnsparser"
+path = "src/main.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "covbuild"
+path = "src/cov.rs"
+
+

@@ -7,7 +7,7 @@ use serde_json::{
 };
 use vrl::prelude::*;
 
-fn parse_json(value: Value) -> Resolved {
+pub fn parse_json(value: Value) -> Resolved {
     let bytes = value.try_bytes()?;
     let value = serde_json::from_slice::<'_, Value>(&bytes)
         .map_err(|e| format!("unable to parse json: {}", e))?;

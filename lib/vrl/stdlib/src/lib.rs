@@ -195,7 +195,7 @@ mod parse_groks;
 #[cfg(feature = "parse_int")]
 mod parse_int;
 #[cfg(feature = "parse_json")]
-mod parse_json;
+pub mod parse_json;
 #[cfg(feature = "parse_key_value")]
 mod parse_key_value;
 #[cfg(feature = "parse_klog")]

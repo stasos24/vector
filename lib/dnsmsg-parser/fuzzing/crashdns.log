@@ -1,0 +1,265 @@
+thread 'main' panicked at 'attempt to subtract with overflow', /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/std/src/panicking.rs:584:5
+   1: core::panicking::panic_fmt
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:142:14
+   2: core::panicking::panic
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:48:5
+   3: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_a6_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+   4: dnsmsg_parser::dns_message_parser::DnsMessageParser::format_unknown_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:483:38
+   5: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_record
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:154:53
+   6: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section::{{closure}}
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:148:27
+   7: core::iter::adapters::map::map_try_fold::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:91:28
+   8: core::iter::traits::iterator::Iterator::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:2238:21
+   9: <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:117:9
+  10: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:191:9
+  11: core::iter::traits::iterator::Iterator::try_for_each
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  12: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::next
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  13: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter_nested.rs:26:32
+  14: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter.rs:33:9
+  15: <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/mod.rs:2648:9
+  16: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  17: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  18: core::iter::adapters::try_process
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:160:17
+  19: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:9
+  20: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:1836:9
+  21: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:146:9
+  22: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_as_query_message
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:82:32
+  23: covbuild::main
+             at ./src/cov.rs:15:23
+  24: core::ops::function::FnOnce::call_once
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/ops/function.rs:248:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+thread 'main' panicked at 'attempt to subtract with overflow', /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/std/src/panicking.rs:584:5
+   1: core::panicking::panic_fmt
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:142:14
+   2: core::panicking::panic
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:48:5
+   3: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_a6_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+   4: dnsmsg_parser::dns_message_parser::DnsMessageParser::format_unknown_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:483:38
+   5: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_record
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:154:53
+   6: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section::{{closure}}
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:148:27
+   7: core::iter::adapters::map::map_try_fold::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:91:28
+   8: core::iter::traits::iterator::Iterator::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:2238:21
+   9: <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:117:9
+  10: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:191:9
+  11: core::iter::traits::iterator::Iterator::try_for_each
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  12: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::next
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  13: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter_nested.rs:26:32
+  14: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter.rs:33:9
+  15: <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/mod.rs:2648:9
+  16: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  17: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  18: core::iter::adapters::try_process
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:160:17
+  19: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:9
+  20: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:1836:9
+  21: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:146:9
+  22: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_as_query_message
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:82:32
+  23: covbuild::main
+             at ./src/cov.rs:15:23
+  24: core::ops::function::FnOnce::call_once
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/ops/function.rs:248:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+thread 'main' panicked at 'attempt to subtract with overflow', /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/std/src/panicking.rs:584:5
+   1: core::panicking::panic_fmt
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:142:14
+   2: core::panicking::panic
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:48:5
+   3: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_a6_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+   4: dnsmsg_parser::dns_message_parser::DnsMessageParser::format_unknown_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:483:38
+   5: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_record
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:154:53
+   6: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section::{{closure}}
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:148:27
+   7: core::iter::adapters::map::map_try_fold::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:91:28
+   8: core::iter::traits::iterator::Iterator::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:2238:21
+   9: <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:117:9
+  10: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:191:9
+  11: core::iter::traits::iterator::Iterator::try_for_each
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  12: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::next
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  13: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter_nested.rs:26:32
+  14: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter.rs:33:9
+  15: <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/mod.rs:2648:9
+  16: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  17: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  18: core::iter::adapters::try_process
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:160:17
+  19: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:9
+  20: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:1836:9
+  21: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:146:9
+  22: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_as_query_message
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:82:32
+  23: covbuild::main
+             at ./src/cov.rs:15:23
+  24: core::ops::function::FnOnce::call_once
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/ops/function.rs:248:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+thread 'main' panicked at 'attempt to subtract with overflow', /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/std/src/panicking.rs:584:5
+   1: core::panicking::panic_fmt
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:142:14
+   2: core::panicking::panic
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:48:5
+   3: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_a6_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+   4: dnsmsg_parser::dns_message_parser::DnsMessageParser::format_unknown_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:483:38
+   5: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_record
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:154:53
+   6: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section::{{closure}}
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:148:27
+   7: core::iter::adapters::map::map_try_fold::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:91:28
+   8: core::iter::traits::iterator::Iterator::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:2238:21
+   9: <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:117:9
+  10: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:191:9
+  11: core::iter::traits::iterator::Iterator::try_for_each
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  12: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::next
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  13: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter_nested.rs:26:32
+  14: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter.rs:33:9
+  15: <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/mod.rs:2648:9
+  16: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  17: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  18: core::iter::adapters::try_process
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:160:17
+  19: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:9
+  20: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:1836:9
+  21: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:146:9
+  22: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_as_query_message
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:82:32
+  23: covbuild::main
+             at ./src/cov.rs:15:23
+  24: core::ops::function::FnOnce::call_once
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/ops/function.rs:248:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+thread 'main' panicked at 'attempt to subtract with overflow', /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/std/src/panicking.rs:584:5
+   1: core::panicking::panic_fmt
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:142:14
+   2: core::panicking::panic
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/panicking.rs:48:5
+   3: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_a6_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:230:34
+   4: dnsmsg_parser::dns_message_parser::DnsMessageParser::format_unknown_rdata
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:483:38
+   5: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_record
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:154:53
+   6: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section::{{closure}}
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:148:27
+   7: core::iter::adapters::map::map_try_fold::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:91:28
+   8: core::iter::traits::iterator::Iterator::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:2238:21
+   9: <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/map.rs:117:9
+  10: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::try_fold
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:191:9
+  11: core::iter::traits::iterator::Iterator::try_for_each
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  12: <core::iter::adapters::GenericShunt<I,R> as core::iter::traits::iterator::Iterator>::next
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:174:9
+  13: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter_nested.rs:26:32
+  14: <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/spec_from_iter.rs:33:9
+  15: <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/alloc/src/vec/mod.rs:2648:9
+  16: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  17: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter::{{closure}}
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:49
+  18: core::iter::adapters::try_process
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/adapters/mod.rs:160:17
+  19: <core::result::Result<V,E> as core::iter::traits::collect::FromIterator<core::result::Result<A,E>>>::from_iter
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/result.rs:2092:9
+  20: core::iter::traits::iterator::Iterator::collect
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/iter/traits/iterator.rs:1836:9
+  21: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_dns_message_section
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:146:9
+  22: dnsmsg_parser::dns_message_parser::DnsMessageParser::parse_as_query_message
+             at /opt/fuzz/vector/lib/dnsmsg-parser/src/dns_message_parser.rs:82:32
+  23: covbuild::main
+             at ./src/cov.rs:15:23
+  24: core::ops::function::FnOnce::call_once
+             at /rustc/38b72154ded23847cd08a796d0c6708b5efac265/library/core/src/ops/function.rs:248:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.

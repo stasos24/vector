@@ -1,0 +1,15 @@
+[sources.in]
+type = "stdin"
+
+
+[transforms.modify]
+type = "remap"
+inputs = ["in"]
+source = '''
+parse_json!(.message)
+'''
+
+[sinks.out]
+inputs = ["in"]
+type = "console"
+encoding.codec = "text"
