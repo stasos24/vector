@@ -173,9 +173,9 @@ mod object;
 #[cfg(feature = "only_fields")]
 mod only_fields;
 #[cfg(feature = "parse_apache_log")]
-mod parse_apache_log;
+pub mod parse_apache_log;
 #[cfg(feature = "parse_aws_alb_log")]
-mod parse_aws_alb_log;
+pub mod parse_aws_alb_log;
 #[cfg(feature = "parse_aws_cloudwatch_log_subscription_message")]
 mod parse_aws_cloudwatch_log_subscription_message;
 #[cfg(feature = "parse_aws_vpc_flow_log")]
@@ -183,7 +183,7 @@ mod parse_aws_vpc_flow_log;
 #[cfg(feature = "parse_common_log")]
 mod parse_common_log;
 #[cfg(feature = "parse_csv")]
-mod parse_csv;
+pub mod parse_csv;
 #[cfg(feature = "parse_duration")]
 mod parse_duration;
 #[cfg(feature = "parse_glog")]
@@ -199,7 +199,7 @@ pub mod parse_json;
 #[cfg(feature = "parse_key_value")]
 mod parse_key_value;
 #[cfg(feature = "parse_klog")]
-mod parse_klog;
+pub mod parse_klog;
 #[cfg(feature = "parse_linux_authorization")]
 mod parse_linux_authorization;
 #[cfg(feature = "parse_logfmt")]
@@ -207,7 +207,7 @@ mod parse_logfmt;
 #[cfg(feature = "parse_nginx_log")]
 mod parse_nginx_log;
 #[cfg(feature = "parse_query_string")]
-mod parse_query_string;
+pub mod parse_query_string;
 #[cfg(feature = "parse_regex")]
 mod parse_regex;
 #[cfg(feature = "parse_regex_all")]
@@ -215,17 +215,17 @@ mod parse_regex_all;
 #[cfg(feature = "parse_ruby_hash")]
 mod parse_ruby_hash;
 #[cfg(feature = "parse_syslog")]
-mod parse_syslog;
+pub mod parse_syslog;
 #[cfg(feature = "parse_timestamp")]
 mod parse_timestamp;
 #[cfg(feature = "parse_tokens")]
 mod parse_tokens;
 #[cfg(feature = "parse_url")]
-mod parse_url;
+pub mod parse_url;
 #[cfg(feature = "parse_user_agent")]
 mod parse_user_agent;
 #[cfg(feature = "parse_xml")]
-mod parse_xml;
+pub mod parse_xml;
 #[cfg(feature = "push")]
 mod push;
 #[cfg(feature = "random_bytes")]

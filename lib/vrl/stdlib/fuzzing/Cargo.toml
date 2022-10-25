@@ -5,9 +5,65 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[package.metadata]
+cargo-fuzz = true
+
 [dependencies]
 vrl-stdlib = { version = "0.1", path = ".."}
 vrl = { path = "../../vrl"}
-
+value = { path = "../../../value", default-features = false } 
+vector_common = {path = "../../../vector-common"}
+arbitrary = { version = "1", optional = true, features = ["derive"] }
+afl = "*"
+syslog_loose = "*"
 [workspace]
 members = ["."]
+
+[[bin]]
+name = "parse_xml"
+path = "src/parse_xml.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "cov_xml"
+path = "src/cov_xml.rs"
+
+
+[[bin]]
+name = "parse_klog"
+path = "src/parse_klog.rs"
+
+[[bin]]
+name = "parse_csv"
+path = "src/parse_csv.rs"
+
+
+[[bin]]
+name = "parse_json"
+path = "src/parse_json.rs"
+
+[[bin]]
+name = "parse_url"
+path = "src/parse_url.rs"
+
+
+[[bin]]
+name = "parse_syslog"
+path = "src/parse_syslog.rs"
+
+
+[[bin]]
+name = "cov_syslog"
+path = "src/cov_syslog.rs"
+
+[[bin]]
+name = "parse_aws"
+path = "src/parse_aws.rs"
+
+
+[[bin]]
+name = "parse_apache_log"
+path = "src/parse_apache_log.rs"
+
+

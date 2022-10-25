@@ -9,14 +9,14 @@ fn main() {
             panic::set_hook(Box::new(|panic_info| {
                 if let Some(location) = panic_info.location() {
                     match location.file() {
-                        "/opt/fuzz/vector/lib/vrl/parser/src/lex.rs" => {
+                        "/opt/app/vector/lib/vrl/parser/src/lex.rs" => {
                             if location.line() == 1266 {
                                 return;
                             } else {
                                 process::abort()
                             }
                         }
-                        "/opt/fuzz/vector/lib/vrl/compiler/src/expression/assignment.rs" => {
+                        "/opt/app/vector/lib/vrl/compiler/src/expression/assignment.rs" => {
                             if location.line() == 250 {
                                 return;
                             } else if location.line() == 253 {
@@ -33,12 +33,16 @@ fn main() {
                             } else {
                                 process::abort()
                             }
-                        }
+                        } 
                         _ => process::abort(),
                     };
                 }
             }));
-
+            
+            if s.contains("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            {
+                return;
+            }
             let payload = panic::catch_unwind(|| {
                 vrl::compile(s, &vrl_stdlib::all());
             });

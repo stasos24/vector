@@ -83,7 +83,7 @@ impl Function for ParseUrl {
 }
 
 #[derive(Debug, Clone)]
-struct ParseUrlFn {
+pub struct ParseUrlFn {
     value: Box<dyn Expression>,
     default_known_ports: Box<dyn Expression>,
 }
@@ -105,7 +105,7 @@ impl Expression for ParseUrlFn {
     }
 }
 
-fn url_to_value(url: Url, default_known_ports: bool) -> Value {
+pub fn url_to_value(url: Url, default_known_ports: bool) -> Value {
     let mut map = BTreeMap::<&str, Value>::new();
 
     map.insert("scheme", url.scheme().to_owned().into());

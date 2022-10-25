@@ -11,18 +11,18 @@ use vrl::prelude::*;
 
 /// Used to keep Clippy's `too_many_argument` check happy.
 #[derive(Debug)]
-struct ParseOptions {
-    trim: Option<Value>,
-    include_attr: Option<Value>,
-    attr_prefix: Option<Value>,
-    text_key: Option<Value>,
-    always_use_text_key: Option<Value>,
-    parse_bool: Option<Value>,
-    parse_null: Option<Value>,
-    parse_number: Option<Value>,
+pub struct ParseOptions {
+    pub trim: Option<Value>,
+    pub include_attr: Option<Value>,
+    pub attr_prefix: Option<Value>,
+    pub text_key: Option<Value>,
+    pub always_use_text_key: Option<Value>,
+    pub parse_bool: Option<Value>,
+    pub parse_null: Option<Value>,
+    pub parse_number: Option<Value>,
 }
 
-fn parse_xml(value: Value, options: ParseOptions) -> Resolved {
+pub fn parse_xml(value: Value, options: ParseOptions) -> Resolved {
     let string = value.try_bytes_utf8_lossy()?;
     let trim = match options.trim {
         Some(value) => value.try_boolean()?,

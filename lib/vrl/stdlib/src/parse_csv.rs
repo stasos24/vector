@@ -2,7 +2,7 @@ use ::value::Value;
 use csv::ReaderBuilder;
 use vrl::prelude::*;
 
-fn parse_csv(csv_string: Value, delimiter: Value) -> Resolved {
+pub fn parse_csv(csv_string: Value, delimiter: Value) -> Resolved {
     let csv_string = csv_string.try_bytes()?;
     let delimiter = delimiter.try_bytes()?;
     if delimiter.len() != 1 {

@@ -4,7 +4,7 @@ use ::value::Value;
 use url::form_urlencoded;
 use vrl::prelude::*;
 
-fn parse_query_string(bytes: Value) -> Resolved {
+pub fn parse_query_string(bytes: Value) -> Resolved {
     let bytes = bytes.try_bytes()?;
     let mut query_string = bytes.as_ref();
     if !query_string.is_empty() && query_string[0] == b'?' {

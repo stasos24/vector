@@ -5,7 +5,7 @@ use vrl::prelude::*;
 
 use crate::log_util;
 
-fn parse_apache_log(
+pub fn parse_apache_log(
     bytes: Value,
     timestamp_format: Option<Value>,
     format: &Bytes,
