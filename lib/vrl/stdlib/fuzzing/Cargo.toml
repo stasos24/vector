@@ -29,15 +29,17 @@ doc = false
 name = "cov_xml"
 path = "src/cov_xml.rs"
 
-
 [[bin]]
 name = "parse_klog"
 path = "src/parse_klog.rs"
 
 [[bin]]
+name = "cov_klog"
+path = "src/cov_klog.rs"
+
+[[bin]]
 name = "parse_csv"
 path = "src/parse_csv.rs"
-
 
 [[bin]]
 name = "parse_json"
