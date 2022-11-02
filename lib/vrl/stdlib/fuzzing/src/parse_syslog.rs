@@ -13,7 +13,7 @@ fn main() {
                                                         if let Some(location) = panic_info.location() {
                                                                                 match location.file() {
                                                                                                             "/usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/chrono-0.4.19/src/date.rs" => {
-                                                                                                                                            if location.line() == 83 {
+                                                                                                                                            if location.line() == 84 {
                                                                                                                                                                                 return;
                                                                                                                                                                                                             }             
                                                                                                                                                                         else {
