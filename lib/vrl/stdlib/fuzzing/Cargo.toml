@@ -30,7 +30,7 @@ name = "cov_xml"
 path = "src/cov_xml.rs"
 
 [[bin]]
-name = "parse_klog"
+name = "fuzz_klog"
 path = "src/parse_klog.rs"
 
 [[bin]]
@@ -49,11 +49,9 @@ path = "src/parse_json.rs"
 name = "parse_url"
 path = "src/parse_url.rs"
 
-
 [[bin]]
-name = "parse_syslog"
+name = "fuzz_syslog"
 path = "src/parse_syslog.rs"
-
 
 [[bin]]
 name = "cov_syslog"
@@ -62,7 +60,6 @@ path = "src/cov_syslog.rs"
 [[bin]]
 name = "parse_aws"
 path = "src/parse_aws.rs"
-
 
 [[bin]]
 name = "parse_apache_log"
