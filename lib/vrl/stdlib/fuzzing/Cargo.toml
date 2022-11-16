@@ -38,16 +38,28 @@ name = "cov_klog"
 path = "src/cov_klog.rs"
 
 [[bin]]
-name = "parse_csv"
+name = "fuzz_csv"
 path = "src/parse_csv.rs"
 
 [[bin]]
-name = "parse_json"
+name = "cov_csv"
+path = "src/cov_csv.rs"
+
+[[bin]]
+name = "fuzz_json"
 path = "src/parse_json.rs"
 
 [[bin]]
-name = "parse_url"
+name = "cov_json"
+path = "src/cov_json.rs"
+
+[[bin]]
+name = "fuzz_url"
 path = "src/parse_url.rs"
+
+[[bin]]
+name = "cov_url"
+path = "src/cov_url.rs"
 
 [[bin]]
 name = "fuzz_syslog"
@@ -58,11 +70,19 @@ name = "cov_syslog"
 path = "src/cov_syslog.rs"
 
 [[bin]]
-name = "parse_aws"
+name = "fuzz_aws"
 path = "src/parse_aws.rs"
 
 [[bin]]
-name = "parse_apache_log"
+name = "cov_aws"
+path = "src/cov_aws.rs"
+
+[[bin]]
+name = "fuzz_apache"
 path = "src/parse_apache_log.rs"
+
+[[bin]]
+name = "cov_apache"
+path = "src/cov_apache_log.rs"
 
 

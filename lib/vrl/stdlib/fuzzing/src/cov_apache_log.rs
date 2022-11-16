@@ -1,8 +1,7 @@
 extern crate vrl;
 use std::str;
-use vrl::prelude::value;
-use vrl_stdlib::parse_klog::parse_klog;
-
+use vrl::prelude::*;
+use vrl_stdlib::parse_apache_log::parse_apache_log;
 fn main() {
     use std::io::{self, BufRead};
     let stdin = io::stdin();
@@ -12,5 +11,5 @@ fn main() {
         Ok(v) => v,
         Err(e) => return,
     };
-    println!("{:?}", vrl_stdlib::parse_klog::parse_klog(value!(s)));
+    parse_apache_log(value!(s), None, "common", None);
 }

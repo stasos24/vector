@@ -1,7 +1,7 @@
 extern crate vrl;
 use std::str;
 use vrl::prelude::value;
-use vrl_stdlib::parse_klog::parse_klog;
+use vrl_stdlib::parse_csv::parse_csv;
 
 fn main() {
     use std::io::{self, BufRead};
@@ -12,5 +12,5 @@ fn main() {
         Ok(v) => v,
         Err(e) => return,
     };
-    println!("{:?}", vrl_stdlib::parse_klog::parse_klog(value!(s)));
+    parse_csv(value!(s), value!(","));
 }

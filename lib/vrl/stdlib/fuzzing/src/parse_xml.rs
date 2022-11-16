@@ -18,11 +18,9 @@ fn main() {
                         "/opt/app/vector/lib/vrl/stdlib/src/parse_xml.rs" => {
                             if location.line() == 301 {
                                 return;
-                            } 
-                            else if location.line() == 373 {
+                            } else if location.line() == 373 {
                                 return;
-                            }
-                            else {
+                            } else {
                                 process::abort()
                             }
                         }

@@ -1,7 +1,0 @@
-{
-    "recommendations": [
-        "bungcip.better-toml",
-        "editorconfig.editorconfig",
-        "matklad.rust-analyzer"
-    ]
-}
