@@ -1,0 +1,5 @@
+--- vector/lib/vrl/stdlib/src/parse_xml.rs	2022-11-16 09:20:54.639790709 -0500
++++ fuzz_vector/lib/vrl/stdlib/src/parse_xml.rs	2022-11-17 11:43:31.550831858 -0500
+@@ -25 +25 @@
+-fn parse_xml(value: Value, options: ParseOptions) -> Resolved {
++pub fn parse_xml(value: Value, options: ParseOptions) -> Resolved {
