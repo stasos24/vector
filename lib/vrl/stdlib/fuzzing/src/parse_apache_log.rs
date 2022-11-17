@@ -11,6 +11,6 @@ fn main() {
             Ok(v) => v,
             Err(e) => return,
         };
-        parse_apache_log(value!(s), None, "common", None);
+        parse_apache_log(value!(s), None, value!("common"), None);
     })
 }
