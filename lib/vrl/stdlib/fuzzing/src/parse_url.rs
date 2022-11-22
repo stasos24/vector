@@ -1,8 +1,7 @@
 extern crate vrl;
 use std::str;
-use vrl::Url;
+use url::Url;
 use vrl::prelude::value;
-use vrl_stdlib::parse_json::parse_json;
 #[macro_use]
 extern crate afl;
 
@@ -12,6 +11,6 @@ fn main() {
             Ok(v) => v,
             Err(e) => return,
         };
-         vrl::Url::parse(&s);
+         url::Url::parse(&s);
     })
 }
