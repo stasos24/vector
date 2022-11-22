@@ -10,10 +10,8 @@ cargo-fuzz = true
 
 [dependencies]
 vrl-stdlib = { version = "0.1", path = ".."}
-vrl = { path = "../../vrl"}
-value = { path = "../../../value", default-features = false } 
-vector-common = {path = "../../../vector-common"}
 arbitrary = { version = "1", optional = true, features = ["derive"] }
+url = { version = "2", optional = true }
 afl = "*"
 syslog_loose = "*"
 [workspace]
