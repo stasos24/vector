@@ -1,6 +1,5 @@
-extern crate vrl;
+extern crate url;
 use std::str;
-use url::Url;
 use vrl::prelude::value;
 
 fn main() {
@@ -12,5 +11,5 @@ fn main() {
         Ok(v) => v,
         Err(e) => return,
     };
-    Url::parse(&s);
+    url::Url::parse(&s);
 }
