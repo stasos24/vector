@@ -11,6 +11,6 @@ fn main() {
             Ok(v) => v,
             Err(e) => return,
         };
-         url::Url::parse(&s);
+         Url::parse(&s);
     })
 }
