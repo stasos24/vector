@@ -1,4 +1,4 @@
-extern crate vrl;
+extern crate url;
 use std::str;
 extern crate url;
 use vrl::prelude::value;
