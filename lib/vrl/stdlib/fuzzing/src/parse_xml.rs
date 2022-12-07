@@ -12,23 +12,6 @@ extern crate afl;
 fn main() {
     fuzz!(|data: &[u8]| {
         if let Ok(s) = std::str::from_utf8(data) {
-            panic::set_hook(Box::new(|panic_info| {
-                if let Some(location) = panic_info.location() {
-                    match location.file() {
-                        "/opt/app/vector/lib/vrl/stdlib/src/parse_xml.rs" => {
-                            if location.line() == 301 {
-                                return;
-                            } else if location.line() == 373 {
-                                return;
-                            } else {
-                                process::abort()
-                            }
-                        }
-                        _ => process::abort(),
-                    };
-                }
-            }));
-
             let options = ParseOptions {
                 trim: None,
                 include_attr: None,
@@ -39,9 +22,7 @@ fn main() {
                 parse_null: None,
                 parse_number: None,
             };
-            let payload = panic::catch_unwind(|| {
                 parse_xml(value!(s), options);
-            });
         }
     });
 }
