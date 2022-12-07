@@ -55,35 +55,9 @@ name = "cov_json"
 path = "src/cov_json.rs"
 
 [[bin]]
-name = "fuzz_url"
-path = "src/parse_url.rs"
-
-[[bin]]
-name = "cov_url"
-path = "src/cov_url.rs"
-
-[[bin]]
-name = "fuzz_syslog"
-path = "src/parse_syslog.rs"
-
-[[bin]]
-name = "cov_syslog"
-path = "src/cov_syslog.rs"
-
-[[bin]]
 name = "fuzz_aws"
 path = "src/parse_aws.rs"
 
 [[bin]]
 name = "cov_aws"
 path = "src/cov_aws.rs"
-
-[[bin]]
-name = "fuzz_apache"
-path = "src/parse_apache_log.rs"
-
-[[bin]]
-name = "cov_apache"
-path = "src/cov_apache_log.rs"
-
-
